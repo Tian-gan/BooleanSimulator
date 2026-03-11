@@ -207,6 +207,44 @@ void generateTruthTable(string expression, ostream& out) {
         }
     }
 }
+// ========== File Save ==========
+void saveToFile(string expression) {
+    cout << "\nEnter filename to save (e.g. output.txt): ";
+    string filename;
+    cin >> filename;
+
+    ofstream file(filename);
+    if (!file.is_open()) {
+        cout << "Error: Could not open file!" << endl;
+        return;
+    }
+
+    file << "*** BOOLEAN TRUTH TABLE SIMULATOR ***" << endl;
+    file << "Expression: " << expression << endl;
+
+    // Write operator explanations to file
+    string expr = expression;
+    transform(expr.begin(), expr.end(), expr.begin(), ::toupper);
+    file << "\nOperators Detected and Explained:" << endl;
+    if (expr.find("NAND") != string::npos)
+        file << "- NAND: Opposite of AND" << endl;
+    else if (expr.find("AND") != string::npos)
+        file << "- AND: True only if BOTH inputs are true" << endl;
+    if (expr.find("NOR") != string::npos)
+        file << "- NOR: Opposite of OR" << endl;
+    else if (expr.find("OR") != string::npos)
+        file << "- OR: True if AT LEAST ONE input is true" << endl;
+    if (expr.find("NOT") != string::npos)
+        file << "- NOT: Inverts the input" << endl;
+    if (expr.find("XOR") != string::npos)
+        file << "- XOR: True only if inputs are DIFFERENT" << endl;
+
+    // Write truth table to file
+    generateTruthTable(expression, file);
+
+    file.close();
+    cout << "Saved successfully to " << filename << "!" << endl;
+}
 int main() {
     cout << "*** BOOLEAN TRUTH TABLE SIMULATOR ***" << endl;
     cout << "\nEnter Boolean Expression (max 3 operators, variables A, B, C):" << endl;
@@ -218,6 +256,13 @@ int main() {
     explainOperators(expression);
 
     generateTruthTable(expression, cout);
+    // Ask user if they want to save
+cout << "\nWould you like to save this to a file? (Y/N): ";
+char save;
+cin >> save;
+if (save == 'Y' || save == 'y') {
+    saveToFile(expression);
+}
     
 
     return 0;
