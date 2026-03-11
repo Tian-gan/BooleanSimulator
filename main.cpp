@@ -167,7 +167,23 @@ bool evaluateExpression(string expr, bool a, bool b, bool c) {
 
     return false;
 }
-
+// ========== Check operator count ==========
+// Returns the number of operators found in the expression
+int countOperators(string expr) {
+    expr = toUpper(expr);
+    int count = 0;
+    int i = 0;
+    while (i < (int)expr.length()) {
+        if (expr.substr(i, 4) == "NAND") { count++; i += 4; }
+        else if (expr.substr(i, 3) == "NOR") { count++; i += 3; }
+        else if (expr.substr(i, 3) == "XOR") { count++; i += 3; }
+        else if (expr.substr(i, 3) == "NOT") { count++; i += 3; }
+        else if (expr.substr(i, 3) == "AND") { count++; i += 3; }
+        else if (expr.substr(i, 2) == "OR")  { count++; i += 2; }
+        else i++;
+    }
+    return count;
+}
 // ========== Operator Explainer ==========
 void explainOperators(string expr) {
     expr = toUpper(expr);
@@ -296,6 +312,10 @@ int main() {
             cout << "\nEnter Boolean Expression (max 3 operators, variables A, B, C):" << endl;
             string expression;
             getline(cin, expression);
+            if (countOperators(expression) > 3) {
+                cout << "Error: Too many operators! Maximum 3 allowed." << endl;
+                continue;
+            }
 
             explainOperators(expression);
             generateTruthTable(expression, cout);
