@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <fstream>
 using namespace std;
 
 // ========== Abstract Base Class ==========
@@ -190,6 +191,22 @@ void explainOperators(string expr) {
 }
 
 // ========== Main Function ==========
+// ========== Truth Table Generator ==========
+void generateTruthTable(string expression, ostream& out) {
+    out << "\nGenerating Truth Table..." << endl;
+    out << "| A | B | C | Result |" << endl;
+    out << "|---|---|---|--------|" << endl;
+
+    for (int a = 0; a <= 1; a++) {
+        for (int b = 0; b <= 1; b++) {
+            for (int c = 0; c <= 1; c++) {
+                bool result = evaluateExpression(expression, a, b, c);
+                out << "| " << a << " | " << b << " | " << c
+                    << " |   " << result << "    |" << endl;
+            }
+        }
+    }
+}
 int main() {
     cout << "*** BOOLEAN TRUTH TABLE SIMULATOR ***" << endl;
     cout << "\nEnter Boolean Expression (max 3 operators, variables A, B, C):" << endl;
@@ -200,20 +217,8 @@ int main() {
     // Explain operators
     explainOperators(expression);
 
-    // Generate truth table
-    cout << "\nGenerating Truth Table..." << endl;
-    cout << "| A | B | C | Result |" << endl;
-    cout << "|---|---|---|--------|" << endl;
-
-    for (int a = 0; a <= 1; a++) {
-        for (int b = 0; b <= 1; b++) {
-            for (int c = 0; c <= 1; c++) {
-                bool result = evaluateExpression(expression, a, b, c);
-                cout << "| " << a << " | " << b << " | " << c
-                     << " |   " << result << "    |" << endl;
-            }
-        }
-    }
+    generateTruthTable(expression, cout);
+    
 
     return 0;
 }
