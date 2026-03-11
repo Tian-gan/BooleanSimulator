@@ -306,12 +306,24 @@ int main() {
 
         int choice;
         cin >> choice;
-        cin.ignore(); // Clear newline from input buffer
+        cin.ignore();
 
         if (choice == 1) {
             cout << "\nEnter Boolean Expression (max 3 operators, variables A, B, C):" << endl;
             string expression;
             getline(cin, expression);
+
+            // Check valid input
+            string exprCheck = toUpper(expression);
+            bool hasVariable = (exprCheck.find('A') != string::npos ||
+                                exprCheck.find('B') != string::npos ||
+                                exprCheck.find('C') != string::npos);
+            if (!hasVariable) {
+                cout << "Error: Must contain at least one variable (A, B, C)!" << endl;
+                continue;
+            }
+
+            // Check operator count
             if (countOperators(expression) > 3) {
                 cout << "Error: Too many operators! Maximum 3 allowed." << endl;
                 continue;
