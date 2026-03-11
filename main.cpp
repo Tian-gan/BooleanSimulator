@@ -245,25 +245,76 @@ void saveToFile(string expression) {
     file.close();
     cout << "Saved successfully to " << filename << "!" << endl;
 }
+// ========== File Load ==========
+void loadFromFile() {
+    cout << "\nEnter filename to load: ";
+    string filename;
+    cin >> filename;
+
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cout << "Error: Could not open file!" << endl;
+        return;
+    }
+
+    // Find the expression line
+    string line;
+    string expression = "";
+    while (getline(file, line)) {
+        if (line.substr(0, 11) == "Expression:") {
+            expression = line.substr(12);
+            break;
+        }
+    }
+    file.close();
+
+    if (expression.empty()) {
+        cout << "Error: No expression found in file!" << endl;
+        return;
+    }
+
+    cout << "\nLoaded Expression: " << expression << endl;
+    explainOperators(expression);
+    generateTruthTable(expression, cout);
+}
+
 int main() {
     cout << "*** BOOLEAN TRUTH TABLE SIMULATOR ***" << endl;
-    cout << "\nEnter Boolean Expression (max 3 operators, variables A, B, C):" << endl;
 
-    string expression;
-    getline(cin, expression);
+    while (true) {
+        cout << "\n--- MENU ---" << endl;
+        cout << "1. Enter new expression" << endl;
+        cout << "2. Load expression from file" << endl;
+        cout << "3. Exit" << endl;
+        cout << "Choose (1/2/3): ";
 
-    // Explain operators
-    explainOperators(expression);
+        int choice;
+        cin >> choice;
+        cin.ignore(); // Clear newline from input buffer
 
-    generateTruthTable(expression, cout);
-    // Ask user if they want to save
-cout << "\nWould you like to save this to a file? (Y/N): ";
-char save;
-cin >> save;
-if (save == 'Y' || save == 'y') {
-    saveToFile(expression);
-}
-    
+        if (choice == 1) {
+            cout << "\nEnter Boolean Expression (max 3 operators, variables A, B, C):" << endl;
+            string expression;
+            getline(cin, expression);
+
+            explainOperators(expression);
+            generateTruthTable(expression, cout);
+
+            cout << "\nWould you like to save this to a file? (Y/N): ";
+            char save;
+            cin >> save;
+            if (save == 'Y' || save == 'y') {
+                saveToFile(expression);
+            }
+
+        } else if (choice == 2) {
+            loadFromFile();
+
+        } else if (choice == 3) {
+            cout << "Goodbye!" << endl;
+            break;
+        }
+    }
 
     return 0;
 }
