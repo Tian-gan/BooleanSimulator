@@ -59,6 +59,7 @@ public:
 // ========== Helper Functions ==========
 
 // Convert string to uppercase
+// Used to make input case-insensitive (e.g. "and" becomes "AND")
 string toUpper(string s) {
     transform(s.begin(), s.end(), s.begin(), ::toupper);
     return s;
