@@ -358,7 +358,10 @@ void loadFromFile() {
     TruthTable tt(boolExpr);
     tt.generate(cout);
 }
-
+// ========== Main Function ==========
+// Entry point of the program
+// Displays a menu and handles user input in a loop
+// Supports entering expressions, loading from file, and exiting
 int main() {
     cout << "*** BOOLEAN TRUTH TABLE SIMULATOR ***" << endl;
 
