@@ -142,6 +142,9 @@ public:
     }
 };
 // ========== Core Expression Evaluator ==========
+// Recursively evaluates a Boolean expression
+// Parameters: expr = the expression string, a/b/c = variable values
+// Returns the boolean result of the expression
 bool evaluateExpression(string expr, bool a, bool b, bool c) {
     expr = trim(toUpper(expr));
 
