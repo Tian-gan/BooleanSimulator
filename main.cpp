@@ -89,7 +89,58 @@ bool isWrappedInBrackets(string expr) {
     }
     return true;
 }
+// ========== BooleanExpression Class ==========
+// This class stores and manages a Boolean expression string.
+// It provides an interface to evaluate the expression
+// with given values for variables A, B and C.
+class BooleanExpression {
+private:
+    string expression;  // Stores the expression string
 
+public:
+    // Constructor - takes the expression as input
+    BooleanExpression(string expr) {
+        expression = expr;
+    }
+
+    // Returns the stored expression
+    string getExpression() {
+        return expression;
+    }
+
+    // Evaluates the stored expression with given variable values
+    // Returns true or false based on the result
+    bool evaluate(bool a, bool b, bool c) {
+        return evaluateExpression(expression, a, b, c);
+    }
+};
+
+// ========== TruthTable Class ==========
+class TruthTable {
+private:
+    BooleanExpression boolExpr;  // Stores the expression object
+
+public:
+    // Constructor - takes a BooleanExpression object
+    TruthTable(BooleanExpression expr) : boolExpr(expr) {}
+
+    // Generates and displays the truth table
+    void generate(ostream& out) {
+        out << "\nGenerating Truth Table..." << endl;
+        out << "| A | B | C | Result |" << endl;
+        out << "|---|---|---|--------|" << endl;
+
+        for (int a = 0; a <= 1; a++) {
+            for (int b = 0; b <= 1; b++) {
+                for (int c = 0; c <= 1; c++) {
+                    bool result = boolExpr.evaluate(a, b, c);
+                    out << "| " << a << " | " << b << " | " << c
+                        << " |   " << result << "    |" << endl;
+                }
+            }
+        }
+    }
+};
 // ========== Core Expression Evaluator ==========
 bool evaluateExpression(string expr, bool a, bool b, bool c) {
     expr = trim(toUpper(expr));
@@ -292,7 +343,9 @@ void loadFromFile() {
 
     cout << "\nLoaded Expression: " << expression << endl;
     explainOperators(expression);
-    generateTruthTable(expression, cout);
+    BooleanExpression boolExpr(expression);
+    TruthTable tt(boolExpr);
+    tt.generate(cout);
 }
 
 int main() {
@@ -331,7 +384,9 @@ int main() {
             }
 
             explainOperators(expression);
-            generateTruthTable(expression, cout);
+            BooleanExpression boolExpr(expression);
+             TruthTable tt(boolExpr);
+             tt.generate(cout);
 
             cout << "\nWould you like to save this to a file? (Y/N): ";
             char save;
