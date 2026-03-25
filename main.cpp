@@ -1,3 +1,8 @@
+// NTO1064 Student Project
+// Boolean Expression & Truth Table Simulator
+// Author: Gantian
+// Description: An interactive Boolean expression simulator
+// using Object-Oriented Programming in C++
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -7,10 +12,11 @@ using namespace std;
 // ========== Abstract Base Class ==========
 class BooleanOperator {
 public:
-    virtual bool evaluate(bool a, bool b) = 0;
-    virtual string explain() = 0;
-    virtual string getName() = 0;
-    virtual ~BooleanOperator() {}
+    virtual bool evaluate(bool a, bool b) = 0;// Pure virtual - must be implemented by derived classes
+    virtual string explain() = 0;// Returns a description of the operator
+    virtual string getName() = 0; // Returns the operator name 
+    virtual ~BooleanOperator() {}// Virtual destructor for safe deletion
+
 };
 
 // ========== Derived Classes ==========
