@@ -281,6 +281,8 @@ void generateTruthTable(string expression, ostream& out) {
     }
 }
 // ========== File Save ==========
+// Saves the expression, operator explanations and truth table to a text file
+// Uses ofstream to write to the file
 void saveToFile(string expression) {
     cout << "\nEnter filename to save (e.g. output.txt): ";
     string filename;
@@ -319,6 +321,8 @@ void saveToFile(string expression) {
     cout << "Saved successfully to " << filename << "!" << endl;
 }
 // ========== File Load ==========
+// Loads a previously saved expression from a text file
+// Uses ifstream to read the file and regenerates the truth table
 void loadFromFile() {
     cout << "\nEnter filename to load: ";
     string filename;
