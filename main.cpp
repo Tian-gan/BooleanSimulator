@@ -7,6 +7,7 @@
 #include <string>
 #include <algorithm>
 #include <fstream>
+#include <vector>
 using namespace std;
 
 // ========== Abstract Base Class ==========
@@ -131,19 +132,120 @@ public:
     // Constructor - takes a BooleanExpression object
     TruthTable(BooleanExpression expr) : boolExpr(expr) {}
 
-    // Generates and displays the truth table
+   // Extracts sub-expressions from the full expression for column display
+    vector<string> getSubExpressions(string expr) {
+        vector<string> subs;
+        string upper = expr;
+        transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
+
+        // Find NOT sub-expressions
+        size_t pos = 0;
+        while ((pos = upper.find("NOT", pos)) != string::npos) {
+            // Find what comes after NOT
+            size_t start = pos;
+            size_t end = pos + 4; // skip "NOT "
+            if (upper[end] == '(') {
+                // Find matching bracket
+                int level = 0;
+                for (size_t i = end; i < upper.length(); i++) {
+                    if (upper[i] == '(') level++;
+                    if (upper[i] == ')') level--;
+                    if (level == 0) { end = i + 1; break; }
+                }
+            } else {
+                // Single variable
+                end = pos + 5; // "NOT X"
+            }
+            subs.push_back(expr.substr(start, end - start));
+            pos += 3;
+        }
+
+        // Find AND/NAND sub-expressions
+        pos = 0;
+        while ((pos = upper.find("AND", pos)) != string::npos) {
+            // Get left side
+            int level = 0;
+            int leftStart = pos - 2;
+            while (leftStart > 0) {
+                if (upper[leftStart] == ')') level++;
+                if (upper[leftStart] == '(') level--;
+                if (level == 0 && upper[leftStart] == ' ' && leftStart < (int)pos - 1) break;
+                leftStart--;
+            }
+            // Get right side
+            size_t rightEnd = pos + 4;
+            level = 0;
+            if (rightEnd < upper.length() && upper[rightEnd] == '(') {
+                for (size_t i = rightEnd; i < upper.length(); i++) {
+                    if (upper[i] == '(') level++;
+                    if (upper[i] == ')') level--;
+                    if (level == 0) { rightEnd = i + 1; break; }
+                }
+            } else {
+                rightEnd = pos + 6;
+            }
+            string sub = expr.substr(leftStart, rightEnd - leftStart);
+            // Remove leading/trailing spaces and brackets
+            while (!sub.empty() && (sub.front() == ' ' || sub.front() == '(')) sub = sub.substr(1);
+            while (!sub.empty() && (sub.back() == ' ' || sub.back() == ')')) sub.pop_back();
+            subs.push_back(sub);
+            pos += 3;
+        }
+
+        // Find OR/NOR sub-expressions  
+        pos = 0;
+        while ((pos = upper.find(" OR ", pos)) != string::npos) {
+            subs.push_back(expr);
+            pos += 4;
+        }
+
+        // Always add the full expression as last column
+        subs.push_back(expr);
+
+        // Remove duplicates
+        vector<string> unique;
+        for (auto& s : subs) {
+            bool found = false;
+            for (auto& u : unique) {
+                if (u == s) { found = true; break; }
+            }
+            if (!found) unique.push_back(s);
+        }
+        return unique;
+    }
+
+    // Generates and displays the truth table with intermediate steps
+    // Uses three nested loops to cover all 8 input combinations
     void generate(ostream& out) {
+        string expr = boolExpr.getExpression();
+        vector<string> subExprs = getSubExpressions(expr);
+
+        // Print header
         out << "\nGenerating Truth Table..." << endl;
-        out << "| A | B | C | Result |" << endl;
-        out << "|---|---|---|--------|" << endl;
+        out << "| A | B | C |";
+        for (auto& s : subExprs) out << " " << s << " |";
+        out << endl;
 
-        for (int a = 0; a <= 1; a++) {         // Loop through all values of A
-            for (int b = 0; b <= 1; b++) {     // Loop through all values of B
-                for (int c = 0; c <= 1; c++) { // Loop through all values of C
-                    bool result = boolExpr.evaluate(a, b, c); // Evaluate for this combination
+        // Print separator
+        out << "|---|---|---|";
+        for (auto& s : subExprs) {
+            string sep(s.length() + 2, '-');
+            out << sep << "|";
+        }
+        out << endl;
 
-                    out << "| " << a << " | " << b << " | " << c
-                        << " |   " << result << "    |" << endl;
+        // Print rows
+        for (int a = 0; a <= 1; a++) {
+            for (int b = 0; b <= 1; b++) {
+                for (int c = 0; c <= 1; c++) {
+                    out << "| " << a << " | " << b << " | " << c << " |";
+                    for (auto& s : subExprs) {
+                        bool res = evaluateExpression(s, a, b, c);
+                        int pad = s.length() / 2;
+                        string spaces(pad, ' ');
+                        out << spaces << " " << res << " " << spaces << "|";
+                    }
+                    out << endl;
                 }
             }
         }
