@@ -240,6 +240,8 @@ int countOperators(string expr) {
     return count;
 }
 // ========== Operator Explainer ==========
+// Detects which operators are used in the expression
+// Prints a clear explanation for each operator found
 void explainOperators(string expr) {
     expr = toUpper(expr);
     cout << "\nOperators Detected and Explained:" << endl;
