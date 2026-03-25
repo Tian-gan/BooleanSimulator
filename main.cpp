@@ -86,15 +86,15 @@ bool evaluateExpression(string expr, bool a, bool b, bool c);
 
 // Check if entire expression is wrapped in matching brackets
 bool isWrappedInBrackets(string expr) {
-    if (expr.front() != '(' || expr.back() != ')') return false;
+    if (expr.front() != '(' || expr.back() != ')') return false;// Quick check first
     int level = 0;
     for (int i = 0; i < (int)expr.length(); i++) {
-        if (expr[i] == '(') level++;
-        if (expr[i] == ')') level--;
+        if (expr[i] == '(') level++;// Track opening brackets
+        if (expr[i] == ')') level--;// Track closing brackets
         // If level hits 0 before the end, brackets don't wrap everything
         if (level == 0 && i < (int)expr.length() - 1) return false;
     }
-    return true;
+    return true; // Outer brackets match
 }
 // ========== BooleanExpression Class ==========
 // This class stores and manages a Boolean expression string.
