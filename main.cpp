@@ -348,7 +348,7 @@ void loadFromFile() {
     string expression = "";
     while (getline(file, line)) {
         if (line.substr(0, 11) == "Expression:") {
-            expression = line.substr(12);
+            expression = trim(line.substr(12));
             break;
         }
     }
