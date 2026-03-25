@@ -14,41 +14,42 @@ public:
 };
 
 // ========== Derived Classes ==========
+// AND operator - returns true only if both inputs are true
 class ANDOperator : public BooleanOperator {
 public:
     bool evaluate(bool a, bool b) { return a && b; }
     string explain() { return "True only if BOTH inputs are true"; }
     string getName() { return "AND"; }
 };
-
+// OR operator - returns true if at least one input is true
 class OROperator : public BooleanOperator {
 public:
     bool evaluate(bool a, bool b) { return a || b; }
     string explain() { return "True if AT LEAST ONE input is true"; }
     string getName() { return "OR"; }
 };
-
+// NOT operator - inverts the input value
 class NOTOperator : public BooleanOperator {
 public:
     bool evaluate(bool a, bool b) { return !a; }
     string explain() { return "Inverts the input"; }
     string getName() { return "NOT"; }
 };
-
+// XOR operator - returns true only if inputs are different
 class XOROperator : public BooleanOperator {
 public:
     bool evaluate(bool a, bool b) { return a != b; }
     string explain() { return "True only if inputs are DIFFERENT"; }
     string getName() { return "XOR"; }
 };
-
+// NAND operator - opposite of AND
 class NANDOperator : public BooleanOperator {
 public:
     bool evaluate(bool a, bool b) { return !(a && b); }
     string explain() { return "Opposite of AND"; }
     string getName() { return "NAND"; }
 };
-
+// NOR operator - opposite of OR
 class NOROperator : public BooleanOperator {
 public:
     bool evaluate(bool a, bool b) { return !(a || b); }
@@ -322,6 +323,7 @@ void saveToFile(string expression) {
 }
 // ========== File Load ==========
 // Loads a previously saved expression from a text file
+
 // Uses ifstream to read the file and regenerates the truth table
 void loadFromFile() {
     cout << "\nEnter filename to load: ";
