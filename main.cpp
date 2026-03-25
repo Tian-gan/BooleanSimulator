@@ -103,23 +103,69 @@ bool isWrappedInBrackets(string expr) {
 // with given values for variables A, B and C.
 class BooleanExpression {
 private:
-    string expression;  // Stores the expression string
+    string expression;
 
 public:
-    // Constructor - takes the expression as input
     BooleanExpression(string expr) {
         expression = expr;
     }
 
-    // Returns the stored expression
     string getExpression() {
         return expression;
     }
 
-    // Evaluates the stored expression with given variable values
-    // Returns true or false based on the result
     bool evaluate(bool a, bool b, bool c) {
         return evaluateExpression(expression, a, b, c);
+    }
+
+    int countOperators() {
+        string expr = toUpper(expression);
+        int count = 0;
+        int i = 0;
+        while (i < (int)expr.length()) {
+            if (expr.substr(i, 4) == "NAND") { count++; i += 4; }
+            else if (expr.substr(i, 3) == "NOR") { count++; i += 3; }
+            else if (expr.substr(i, 3) == "XOR") { count++; i += 3; }
+            else if (expr.substr(i, 3) == "NOT") { count++; i += 3; }
+            else if (expr.substr(i, 3) == "AND") { count++; i += 3; }
+            else if (expr.substr(i, 2) == "OR")  { count++; i += 2; }
+            else i++;
+        }
+        return count;
+    }
+
+    void explainOperators() {
+        string expr = toUpper(expression);
+        cout << "\nOperators Detected and Explained:" << endl;
+        if (expr.find("NAND") != string::npos)
+            cout << "- NAND: Opposite of AND" << endl;
+        else if (expr.find("AND") != string::npos)
+            cout << "- AND: True only if BOTH inputs are true" << endl;
+        if (expr.find("NOR") != string::npos)
+            cout << "- NOR: Opposite of OR" << endl;
+        else if (expr.find("OR") != string::npos)
+            cout << "- OR: True if AT LEAST ONE input is true" << endl;
+        if (expr.find("NOT") != string::npos)
+            cout << "- NOT: Inverts the input" << endl;
+        if (expr.find("XOR") != string::npos)
+            cout << "- XOR: True only if inputs are DIFFERENT" << endl;
+    }
+
+    void explainOperatorsToFile(ofstream& file) {
+        string expr = toUpper(expression);
+        file << "\nOperators Detected and Explained:" << endl;
+        if (expr.find("NAND") != string::npos)
+            file << "- NAND: Opposite of AND" << endl;
+        else if (expr.find("AND") != string::npos)
+            file << "- AND: True only if BOTH inputs are true" << endl;
+        if (expr.find("NOR") != string::npos)
+            file << "- NOR: Opposite of OR" << endl;
+        else if (expr.find("OR") != string::npos)
+            file << "- OR: True if AT LEAST ONE input is true" << endl;
+        if (expr.find("NOT") != string::npos)
+            file << "- NOT: Inverts the input" << endl;
+        if (expr.find("XOR") != string::npos)
+            file << "- XOR: True only if inputs are DIFFERENT" << endl;
     }
 };
 
@@ -425,7 +471,9 @@ void saveToFile(string expression) {
         file << "- XOR: True only if inputs are DIFFERENT" << endl;
 
     // Write truth table to file
-    generateTruthTable(expression, file);
+    BooleanExpression boolExpr(expression);
+    TruthTable tt(boolExpr);
+    tt.generate(file);
 
     file.close();
     cout << "Saved successfully to " << filename << "!" << endl;
