@@ -453,22 +453,9 @@ void saveToFile(string expression) {
     file << "*** BOOLEAN TRUTH TABLE SIMULATOR ***" << endl;
     file << "Expression: " << expression << endl;
 
-    // Write operator explanations to file
-    string expr = expression;
-    transform(expr.begin(), expr.end(), expr.begin(), ::toupper);
-    file << "\nOperators Detected and Explained:" << endl;
-    if (expr.find("NAND") != string::npos)
-        file << "- NAND: Opposite of AND" << endl;
-    else if (expr.find("AND") != string::npos)
-        file << "- AND: True only if BOTH inputs are true" << endl;
-    if (expr.find("NOR") != string::npos)
-        file << "- NOR: Opposite of OR" << endl;
-    else if (expr.find("OR") != string::npos)
-        file << "- OR: True if AT LEAST ONE input is true" << endl;
-    if (expr.find("NOT") != string::npos)
-        file << "- NOT: Inverts the input" << endl;
-    if (expr.find("XOR") != string::npos)
-        file << "- XOR: True only if inputs are DIFFERENT" << endl;
+   // Write operator explanations to file
+    BooleanExpression boolExpr(expression);
+    boolExpr.explainOperatorsToFile(file);
 
     // Write truth table to file
     BooleanExpression boolExpr(expression);
@@ -510,8 +497,8 @@ void loadFromFile() {
     }
 
     cout << "\nLoaded Expression: " << expression << endl;
-    explainOperators(expression);
     BooleanExpression boolExpr(expression);
+    boolExpr.explainOperators();
     TruthTable tt(boolExpr);
     tt.generate(cout);
 }
@@ -549,13 +536,14 @@ int main() {
             }
 
             // Check operator count
-            if (countOperators(expression) > 3) {
+             BooleanExpression tempExpr(expression);
+             if (tempExpr.countOperators() > 3) {
                 cout << "Error: Too many operators! Maximum 3 allowed." << endl;
                 continue;
             }
 
-            explainOperators(expression);
             BooleanExpression boolExpr(expression);
+            boolExpr.explainOperators();
              TruthTable tt(boolExpr);
              tt.generate(cout);
 
