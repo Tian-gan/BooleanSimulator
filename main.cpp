@@ -137,10 +137,11 @@ public:
         out << "| A | B | C | Result |" << endl;
         out << "|---|---|---|--------|" << endl;
 
-        for (int a = 0; a <= 1; a++) {
-            for (int b = 0; b <= 1; b++) {
-                for (int c = 0; c <= 1; c++) {
-                    bool result = boolExpr.evaluate(a, b, c);
+        for (int a = 0; a <= 1; a++) {         // Loop through all values of A
+            for (int b = 0; b <= 1; b++) {     // Loop through all values of B
+                for (int c = 0; c <= 1; c++) { // Loop through all values of C
+                    bool result = boolExpr.evaluate(a, b, c); // Evaluate for this combination
+
                     out << "| " << a << " | " << b << " | " << c
                         << " |   " << result << "    |" << endl;
                 }
@@ -270,7 +271,7 @@ void explainOperators(string expr) {
         cout << "- XOR: True only if inputs are DIFFERENT" << endl;
 }
 
-// ========== Main Function ==========
+
 // ========== Truth Table Generator ==========
 void generateTruthTable(string expression, ostream& out) {
     out << "\nGenerating Truth Table..." << endl;
