@@ -378,64 +378,10 @@ bool evaluateExpression(string expr, bool a, bool b, bool c) {
 
     return false;
 }
-// ========== Check operator count ==========
-// Returns the number of operators found in the expression
-int countOperators(string expr) {
-    expr = toUpper(expr);
-    int count = 0;
-    int i = 0;
-    while (i < (int)expr.length()) {
-        if (expr.substr(i, 4) == "NAND") { count++; i += 4; }
-        else if (expr.substr(i, 3) == "NOR") { count++; i += 3; }
-        else if (expr.substr(i, 3) == "XOR") { count++; i += 3; }
-        else if (expr.substr(i, 3) == "NOT") { count++; i += 3; }
-        else if (expr.substr(i, 3) == "AND") { count++; i += 3; }
-        else if (expr.substr(i, 2) == "OR")  { count++; i += 2; }
-        else i++;
-    }
-    return count;
-}
-// ========== Operator Explainer ==========
-// Detects which operators are used in the expression
-// Prints a clear explanation for each operator found
-void explainOperators(string expr) {
-    expr = toUpper(expr);
-    cout << "\nOperators Detected and Explained:" << endl;
-
-    if (expr.find("NAND") != string::npos)
-        cout << "- NAND: Opposite of AND" << endl;
-    else if (expr.find("AND") != string::npos)
-        cout << "- AND: True only if BOTH inputs are true" << endl;
-
-    if (expr.find("NOR") != string::npos)
-        cout << "- NOR: Opposite of OR" << endl;
-    else if (expr.find("OR") != string::npos)
-        cout << "- OR: True if AT LEAST ONE input is true" << endl;
-
-    if (expr.find("NOT") != string::npos)
-        cout << "- NOT: Inverts the input" << endl;
-
-    if (expr.find("XOR") != string::npos)
-        cout << "- XOR: True only if inputs are DIFFERENT" << endl;
-}
 
 
-// ========== Truth Table Generator ==========
-void generateTruthTable(string expression, ostream& out) {
-    out << "\nGenerating Truth Table..." << endl;
-    out << "| A | B | C | Result |" << endl;
-    out << "|---|---|---|--------|" << endl;
 
-    for (int a = 0; a <= 1; a++) {
-        for (int b = 0; b <= 1; b++) {
-            for (int c = 0; c <= 1; c++) {
-                bool result = evaluateExpression(expression, a, b, c);
-                out << "| " << a << " | " << b << " | " << c
-                    << " |   " << result << "    |" << endl;
-            }
-        }
-    }
-}
+
 // ========== File Save ==========
 // Saves the expression, operator explanations and truth table to a text file
 // Uses ofstream to write to the file
@@ -453,12 +399,11 @@ void saveToFile(string expression) {
     file << "*** BOOLEAN TRUTH TABLE SIMULATOR ***" << endl;
     file << "Expression: " << expression << endl;
 
-   // Write operator explanations to file
+    // Write operator explanations to file
     BooleanExpression boolExpr(expression);
     boolExpr.explainOperatorsToFile(file);
 
     // Write truth table to file
-    BooleanExpression boolExpr(expression);
     TruthTable tt(boolExpr);
     tt.generate(file);
 
