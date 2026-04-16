@@ -18,6 +18,13 @@ Supports: AND, OR, NOT, XOR, NAND, NOR | Variables: A, B, C | Max 3 operators
 - **ANDOperator, OROperator, NOTOperator, XOROperator, NANDOperator, NOROperator** - derived classes
 - **BooleanExpression** - stores, evaluates and explains expressions
 - **TruthTable** - generates truth table with intermediate columns
+
+## File Structure
+
+- **`BooleanOperator.h`** — Class declarations
+- **`BooleanOperator.cpp`** — Method implementations
+- **`main.cpp`** — User interaction, file saving and loading
+  
 ## Design Decisions
 
 - **Inheritance & Polymorphism**: Each operator (AND, OR, NOT etc.) is its own class that inherits from the abstract base class `BooleanOperator`. This makes it easy to add new operators in the future.
