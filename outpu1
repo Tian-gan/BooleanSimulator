@@ -1,0 +1,17 @@
+*** BOOLEAN TRUTH TABLE SIMULATOR ***
+Expression: A AND B
+
+Operators Detected and Explained:
+- AND: True only if BOTH inputs are true
+
+Generating Truth Table...
+| A | B | C | A AND B |
+|---|---|---|---------|
+| 0 | 0 | 0 |    0    |
+| 0 | 0 | 1 |    0    |
+| 0 | 1 | 0 |    0    |
+| 0 | 1 | 1 |    0    |
+| 1 | 0 | 0 |    0    |
+| 1 | 0 | 1 |    0    |
+| 1 | 1 | 0 |    1    |
+| 1 | 1 | 1 |    1    |
