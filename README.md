@@ -3,8 +3,7 @@
 
 ## How to compile and run
 ```
-g++ main.cpp -o simulator
-./simulator
+g++ main.cpp BooleanOperator.cpp -o simulator
 ```
 
 ## How to use
